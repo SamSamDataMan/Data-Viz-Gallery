@@ -22,7 +22,7 @@ if option == 'NBA Player Stats':
 
     # Create Plot
     fig = plt.figure()
-    plt.title(x_axis + 'vs' + y_axis)
+    plt.title(x_axis + ' vs ' + y_axis)
     ax = sns.scatterplot(x_axis, y_axis, data=df, size=size)
     plt.legend()
     plt.grid(b=True, which="major", linewidth=0.4)
