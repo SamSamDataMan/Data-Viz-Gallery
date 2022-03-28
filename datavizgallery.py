@@ -8,15 +8,9 @@ from sidebar import render_option, render_nba_player_stats_options
 option = render_option()
 
 base = os.path.dirname(__file__)
-print(' ')
-print('base =', base)
-print(' ')
-file = os.path.join(base, 'Data', 'NBA_20_21', 'Player Stats 2020 & 2021.csv')
-print('file =', file)
-print(' ')
 
 if option == 'NBA Player Stats':
-    df = pd.read_csv(file)
+    df = pd.read_csv(os.path.join(base, 'Data', 'NBA_20_21', 'Player Stats 2020 & 2021.csv'))
     df.rename(columns={"'+/-": "+/-"})
 
     cols = list(df.columns)
