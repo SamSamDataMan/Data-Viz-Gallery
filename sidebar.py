@@ -10,6 +10,6 @@ def render_option():
     )
     return option
 
-def render_nba_player_stats_options(title, cols):
-    variable = st.sidebar.selectbox('Choose your ' + title + ' Variable', cols[2:])
+def render_nba_player_stats_options(title, cols, default):
+    variable = st.sidebar.selectbox('Choose your ' + title + ' Variable', cols[2:], index=default)
     return variable

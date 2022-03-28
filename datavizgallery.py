@@ -16,9 +16,9 @@ if option == 'NBA Player Stats':
     cols = list(df.columns)
 
     # Choose Input Variables
-    x_axis = render_nba_player_stats_options('X-Axis', cols)
-    y_axis = render_nba_player_stats_options('Y-Axis', cols)
-    size = render_nba_player_stats_options('Size', cols)
+    x_axis = render_nba_player_stats_options('X-Axis', cols, 15)
+    y_axis = render_nba_player_stats_options('Y-Axis', cols, 16)
+    size = render_nba_player_stats_options('Size', cols, 2)
 
     # Create Plot
     fig = plt.figure()
