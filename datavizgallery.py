@@ -42,7 +42,7 @@ elif option == 'NBA':
 
     # Create Plot
     fig = plt.figure(figsize=(9, 9))
-    plt.title(x_axis + ' vs ' + y_axis + ' Over ' + year + ' Season.')
+    plt.title(x_axis + ' vs ' + y_axis + ' Over ' + year + ' Season')
     ax = sns.scatterplot(x_axis,
                          y_axis,
                          data=df,
