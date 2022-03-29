@@ -38,6 +38,8 @@ elif option == 'NBA':
     y_head = df.sort_values(by=[y_axis], ascending=[False]).head(15)
     annotations = pd.concat([x_head[['PLAYER', x_axis, y_axis]], y_head[['PLAYER', x_axis, y_axis]]]).drop_duplicates()
 
+    st.title('Player Stats by Season')
+
     # Create Plot
     fig = plt.figure(figsize=(9, 9))
     plt.title(x_axis + ' vs ' + y_axis + ' Over ' + year + ' Season.')
