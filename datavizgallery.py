@@ -1,14 +1,17 @@
 import os
 import random
-from re import M
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import HoverTool, Tooltip
 import seaborn as sns
 import streamlit as st
 from home import render_home
 from sidebar import even_bigger_chart, render_option, render_option_nba, render_year_selection, optional_variable_checkbox, render_nba_player_stats_options, bigger_chart
 
-print('imports done')
+def normalize(values, bounds):
+    return [bounds['desired']['lower'] + (x - bounds['actual']['lower']) * (bounds['desired']['upper'] - bounds['desired']['lower']) / (bounds['actual']['upper'] - bounds['actual']['lower']) for x in values]
 
 option = render_option()
 
@@ -23,7 +26,10 @@ elif option == 'NBA':
     option_nba = render_option_nba()
     if option_nba == 'Year to Year Comparison':
         st.title('Hang tight... Page Coming Soon.')
+        st.title('Player Stats by Season')
+
     elif option_nba == 'Single Season Multi-Stat Comparison':
+        st.title('Player Stats by Season')
 
         year = render_year_selection(df)
         df = df[df['YEAR'] == year]
@@ -32,40 +38,30 @@ elif option == 'NBA':
         x_axis = render_nba_player_stats_options('X-Axis', cols, 15)
         y_axis = render_nba_player_stats_options('Y-Axis', cols, 16)
         markersize = optional_variable_checkbox('marker size')
+
+        graph = figure(title=x_axis + ' vs ' + y_axis + ' Over ' + year + ' Season',
+                       plot_height=800,
+                       plot_width=800,
+                       tools=['hover'])
+
+        graph.title.text_font_size = '20pt'
+        graph.title.align = 'center'
+        graph.xaxis.axis_label = x_axis
+        graph.xaxis.axis_label_text_font_size = "16pt"
+        graph.yaxis.axis_label = y_axis
+        graph.yaxis.axis_label_text_font_size = "16pt"
+
+        hover = graph.select(dict(type=HoverTool))
+
         if markersize:
             size = render_nba_player_stats_options('Size', cols, 0)
+            df['markersize'] = (pd.qcut(df[size], 4, labels=False) + 1) * 4
+            graph.scatter(x=x_axis, y=y_axis, source=df, size='markersize')
+            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis), (size, '@' + size)]
         else:
-            size = None
+            graph.scatter(x=x_axis, y=y_axis, source=df, size=9)
+            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis)]
 
-        # Define annotations dataframe
-        x_head = df.sort_values(by=[x_axis], ascending=[False]).head(15)
-        y_head = df.sort_values(by=[y_axis], ascending=[False]).head(15)
-        annotations = pd.concat([x_head[['PLAYER', x_axis, y_axis]], y_head[['PLAYER', x_axis, y_axis]]]).drop_duplicates()
-
-        st.title('Player Stats by Season')
-
-        # Create Plot
-        fig = plt.figure(figsize=(10, 10))
-        if bigger_chart():
-            fig = plt.figure(figsize=(18, 18))
-            if even_bigger_chart():
-                fig = plt.figure(figsize=(22, 22))
-        plt.title(x_axis + ' vs ' + y_axis + ' Over ' + year + ' Season')
-        ax = sns.scatterplot(x_axis,
-                             y_axis,
-                             data=df,
-                             size=size,
-                             color='#E47041',
-                             edgecolor='black'
-                             )
-        plt.legend(prop={'size': 9})
-        for i in range(len(annotations)):
-            plt.annotate(annotations['PLAYER'].iloc[i],
-                         (annotations[x_axis].iloc[i] + (annotations[x_axis].iloc[i] * 0.01),
-                         (annotations[y_axis].iloc[i] + (annotations[y_axis].iloc[i] * (random.randrange(-2, 2) / 100)))))
-        ax.set_facecolor('#c39c76')
-        ax.set_axisbelow(True)
-        plt.grid(b=True, which="major", linewidth=.5, color='#ffffff')
-        st.pyplot(fig)
+        st.bokeh_chart(graph)
 
         st.write('Data Source: https://www.nba.com/stats')
