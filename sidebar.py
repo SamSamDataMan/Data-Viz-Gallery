@@ -1,3 +1,4 @@
+import turtle
 import streamlit as st
 
 def render_option():
