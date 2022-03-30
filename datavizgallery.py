@@ -1,5 +1,6 @@
 import os
 import random
+from turtle import fillcolor
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -24,11 +25,11 @@ elif option == 'NBA':
     df.rename(columns={"'+/-": "+/-"})
     cols = list(df.columns)
     option_nba = render_option_nba()
-    if option_nba == 'Year to Year Comparison':
-        st.title('Hang tight... Page Coming Soon.')
-        st.title('Player Stats by Season')
+    # if option_nba == 'Year to Year Comparison':
+    #     st.title('Hang tight... Page Coming Soon.')
+    #     st.title('Player Stats by Season')
 
-    elif option_nba == 'Single Season Multi-Stat Comparison':
+    if option_nba == 'Single Season Multi-Stat Comparison':
         st.title('Player Stats by Season')
 
         year = render_year_selection(df)
@@ -46,21 +47,37 @@ elif option == 'NBA':
 
         graph.title.text_font_size = '20pt'
         graph.title.align = 'center'
+        graph.title.text_color = '#ffffff'
         graph.xaxis.axis_label = x_axis
         graph.xaxis.axis_label_text_font_size = "16pt"
+        graph.xaxis.axis_label_text_color = '#ffffff'
         graph.yaxis.axis_label = y_axis
         graph.yaxis.axis_label_text_font_size = "16pt"
+        graph.yaxis.axis_label_text_color = '#ffffff'
+        graph.background_fill_color = '#c39c76'
+        graph.border_fill_color = '#743e16'
 
         hover = graph.select(dict(type=HoverTool))
 
         if markersize:
             size = render_nba_player_stats_options('Size', cols, 0)
             df['markersize'] = (pd.qcut(df[size], 4, labels=False) + 1) * 4
-            graph.scatter(x=x_axis, y=y_axis, source=df, size='markersize')
-            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis), (size, '@' + size)]
+            size_value = 'markersize'
+            if size == x_axis or size == y_axis:
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis)]
+            else:
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis), (size, '@' + size)]
         else:
-            graph.scatter(x=x_axis, y=y_axis, source=df, size=9)
+            size_value = 9
             hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis)]
+
+        graph.scatter(x=x_axis,
+                      y=y_axis,
+                      source=df,
+                      size=size_value,
+                      fill_color='#f29539',
+                      line_color='black',
+                      )
 
         st.bokeh_chart(graph)
 

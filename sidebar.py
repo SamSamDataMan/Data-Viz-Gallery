@@ -16,7 +16,7 @@ def render_option_nba():
     option_nba = st.sidebar.selectbox(
         'NBA Charts:',
         (
-            'Year to Year Comparison',
+            # 'Year to Year Comparison',
             'Single Season Multi-Stat Comparison',
         ),
     )
