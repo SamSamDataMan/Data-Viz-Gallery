@@ -5,3 +5,4 @@ matplotlib==3.2.2
 bokeh==2.4.1
 Jinja2==3.0.0
 turtle==0.0.1
+tkinter==8.5
