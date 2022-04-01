@@ -22,7 +22,7 @@ if option == 'Home':
     render_home()
 elif option == 'NBA':
     df = pd.read_csv(os.path.join(base, 'Data', 'NBA', 'Player Stats.csv'))
-    df.rename(columns={"'+/-": "+/-"})
+    df.rename(columns={"'+/-": "+/-"}, inplace=True)
     cols = list(df.columns)
     option_nba = render_option_nba()
     # if option_nba == 'Year to Year Comparison':
@@ -64,12 +64,12 @@ elif option == 'NBA':
             df['markersize'] = (pd.qcut(df[size], 4, labels=False) + 1) * 4
             size_value = 'markersize'
             if size == x_axis or size == y_axis:
-                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis)]
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
             else:
-                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis), (size, '@' + size)]
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (size, '@' + size + "{0}"), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
         else:
             size_value = 9
-            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis), (y_axis, '@' + y_axis)]
+            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
 
         graph.scatter(x=x_axis,
                       y=y_axis,
