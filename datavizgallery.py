@@ -46,7 +46,7 @@ elif option == 'NBA':
                 BLK_PG=round((df.BLK / df.GP), 2),
                 PF_PG=round((df.PF / df.GP), 2),
                 FP_PG=round((df.FP / df.GP), 2),
-                PlusMinus_PG=round((df['+/-'] / df.GP), 2),
+                Plus_Minus_PG=round((df['+/-'] / df.GP), 2),
                 # Per 36 Minute Stats(df.MIN/36)
                 MIN_Per36=round((df.MIN / (df.MIN / 36)), 2),
                 PTS_Per36=round((df.PTS / (df.MIN / 36)), 2),
@@ -65,15 +65,16 @@ elif option == 'NBA':
                 BLK_Per36=round((df.BLK / (df.MIN / 36)), 2),
                 PF_Per36=round((df.PF / (df.MIN / 36)), 2),
                 FP_Per36=round((df.FP / (df.MIN / 36)), 2),
-                PlusMinus_Per36=round((df['+/-'] / (df.MIN / 36)), 2),
+                Plus_Minus_Per36=round((df['+/-'] / (df.MIN / 36)), 2),
                 )
           .rename(columns={
                         'TPM_PG': '3PM_PG',
                         'TPA_PG': '3PA_PG',
                         'TPM_Per36': '3PM_Per36',
                         'TPA_Per36': '3PA_Per36',
-                        'PlusMinus_PG': '+/- PG',
-                        'PlusMinus_Per36': '+/- Per36',
+                        '+/-': 'Plus_Minus'
+                        #'PlusMinus_PG': '+/-_PG',
+                        #'PlusMinus_Per36': '+/-_Per36',
                         }
                   )
           )
