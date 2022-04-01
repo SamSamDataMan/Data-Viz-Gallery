@@ -77,7 +77,7 @@ elif option == 'NBA':
                         }
                   )
           )
-          
+
     cols = list(df.columns)
   
     # if option_nba == 'Year to Year Comparison':
@@ -119,12 +119,12 @@ elif option == 'NBA':
             df['markersize'] = (pd.qcut(df[size], 4, labels=False) + 1) * 4
             size_value = 'markersize'
             if size == x_axis or size == y_axis:
-                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0.0}"), (y_axis, '@' + y_axis + "{0.0}")]
             else:
-                hover.tooltips = [('PLAYER', '@{PLAYER}'), (size, '@' + size + "{0}"), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
+                hover.tooltips = [('PLAYER', '@{PLAYER}'), (size, '@' + size + "{0.0}"), (x_axis, '@' + x_axis + "{0.0}"), (y_axis, '@' + y_axis + "{0.0}")]
         else:
             size_value = 9
-            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0}"), (y_axis, '@' + y_axis + "{0}")]
+            hover.tooltips = [('PLAYER', '@{PLAYER}'), (x_axis, '@' + x_axis + "{0.0}"), (y_axis, '@' + y_axis + "{0.0}")]
 
         graph.scatter(x=x_axis,
                       y=y_axis,
