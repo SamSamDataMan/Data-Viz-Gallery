@@ -48,7 +48,6 @@ elif option == 'NBA':
                 FP_PG=round((df.FP / df.GP), 2),
                 Plus_Minus_PG=round((df['+/-'] / df.GP), 2),
                 # Per 36 Minute Stats(df.MIN/36)
-                MIN_Per36=round((df.MIN / (df.MIN / 36)), 2),
                 PTS_Per36=round((df.PTS / (df.MIN / 36)), 2),
                 FGM_Per36=round((df.FGM / (df.MIN / 36)), 2),
                 FGA_Per36=round((df.FGA / (df.MIN / 36)), 2),
