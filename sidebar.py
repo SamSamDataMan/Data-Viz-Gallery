@@ -17,8 +17,8 @@ def render_option_nba():
     option_nba = st.sidebar.selectbox(
         'NBA Charts:',
         (
-            # 'Year to Year Comparison',
-            'Single Season Multi-Stat Comparison',
+            'Player Stats Over Time',
+            'Player Stats by Season',
         ),
     )
     return option_nba
@@ -34,8 +34,8 @@ def render_nba_player_stats_options(title, cols, default):
     variable = st.sidebar.selectbox('Choose your ' + title + ' Variable', cols[4:], index=default)
     return variable
 
-def bigger_chart():
-    return st.sidebar.checkbox('Help! Labels are overlapping!')
-
-def even_bigger_chart():
-    return st.sidebar.checkbox('Help! Labels still are overlapping!')
+def season_slider(years):
+    a = int(min(years))
+    b = int(max(years))
+    year_low, year_high = st.sidebar.slider('Choose a Year', min_value = a, max_value = b, value=[a, b])
+    return year_low, year_high

@@ -9,7 +9,7 @@ from bokeh.models import HoverTool, Tooltip
 import seaborn as sns
 import streamlit as st
 from home import render_home
-from sidebar import even_bigger_chart, render_option, render_option_nba, render_year_selection, optional_variable_checkbox, render_nba_player_stats_options, bigger_chart
+from sidebar import render_option, render_option_nba, render_year_selection, optional_variable_checkbox, render_nba_player_stats_options, season_slider
 
 def normalize(values, bounds):
     return [bounds['desired']['lower'] + (x - bounds['actual']['lower']) * (bounds['desired']['upper'] - bounds['desired']['lower']) / (bounds['actual']['upper'] - bounds['actual']['lower']) for x in values]
@@ -80,11 +80,22 @@ elif option == 'NBA':
 
     cols = list(df.columns)
   
-    # if option_nba == 'Year to Year Comparison':
-    #     st.title('Hang tight... Page Coming Soon.')
-    #     st.title('Player Stats by Season')
+    if option_nba == 'Player Stats Over Time':
+        years = list(df.BEGIN_YEAR.unique())
+        year_low, year_high = season_slider(years)
+        st.text(year_low)
+        st.text(year_high)
+        st.title('Hang tight... Page Coming Soon.')
+        st.title('Player Stats by Season')
+        df_1 = df[df['BEGIN_YEAR'] == year_low]
+        df_2 = df[df['BEGIN_YEAR'] == year_high]
+        st.text(df_1.head())
+        st.text(df_2.head())
+        stat = 'MIN'
+        df_merged = df_1[['PLAYER', stat]].merge(df_2[['PLAYER', stat]], how='inner', on='PLAYER')
+        st.text(df_merged.head())
 
-    if option_nba == 'Single Season Multi-Stat Comparison':
+    if option_nba == 'Player Stats by Season':
         st.title('Player Stats by Season')
 
         year = render_year_selection(df)
