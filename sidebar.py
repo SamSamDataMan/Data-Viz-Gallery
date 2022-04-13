@@ -37,5 +37,5 @@ def render_nba_player_stats_options(title, cols, default):
 def season_slider(years):
     a = int(min(years))
     b = int(max(years))
-    year_low, year_high = st.sidebar.slider('Choose a Year', min_value = a, max_value = b, value=[a, b])
+    year_low, year_high = st.sidebar.slider('Choose a Year', min_value=a, max_value=b, value=[a, b])
     return year_low, year_high
