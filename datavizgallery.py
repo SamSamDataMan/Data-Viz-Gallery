@@ -39,9 +39,21 @@ elif option == 'NBA':
         df_2 = df[df['BEGIN_YEAR'] == year_high]
         st.text(df_1.head())
         st.text(df_2.head())
-        stat = 'MIN'
+        stat = 'MIN_PG'
         df_merged = df_1[['PLAYER', stat]].merge(df_2[['PLAYER', stat]], how='inner', on='PLAYER')
+        df_merged.rename(columns={stat + '_x': stat + ' ' + str(year_low), stat + '_y': stat + ' ' + str(year_high)}, inplace=True)
         st.text(df_merged.head())
+
+        df_merged.sort_values(stat + ' ' + str(year_high), inplace=True)
+
+        fig = plt.figure(figsize=(10,len(df_merged)/4))
+        plt.scatter(x=stat + ' ' + str(year_low), y='PLAYER', data=df_merged, color = 'r', s=50)
+        plt.scatter(x=stat + ' ' + str(year_high), y='PLAYER', data=df_merged, color = 'b', s=50)
+        plt.hlines(y=range(len(df_merged)), xmin = df_merged[stat + ' ' + str(year_low)], xmax = df_merged[stat + ' ' + str(year_high)])
+        st.write(fig)
+
+
+        st.write('Data Source: https://www.nba.com/stats')
 
     if option_nba == 'Player Stats by Season':
         st.title('Player Stats by Season')
