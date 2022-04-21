@@ -41,18 +41,37 @@ elif option == 'NBA':
 
         df_merged.sort_values(stat + ' ' + str(year_high), inplace=True)
         df_merged = df_merged.reset_index(drop=True)
+        df_merged.dropna(inplace=True)
         # df_merged.reset_index(inplace=True)
 
+        if len(df_merged) < 50:
+            fig_scaler = 20
+        elif len(df_merged) < 100:
+            fig_scaler = 30
+        elif len(df_merged) < 150:
+            fig_scaler = 40
+        elif len(df_merged) < 200:
+            fig_scaler = 50
+        elif len(df_merged) < 250:
+            fig_scaler = 60
+        elif len(df_merged) < 300:
+            fig_scaler = 70
+        elif len(df_merged) < 350:
+            fig_scaler = 80
+        else:
+            fig_scaler = 90
 
-        fig = plt.figure(figsize=(10,len(df_merged)/(len(df_merged)/50)))
+        fig = plt.figure(figsize=(10,len(df_merged)/(len(df_merged)/fig_scaler)))
         plt.title('Player Stats - Year-to-Year Comparison')
         plt.scatter(x=stat + ' ' + str(year_low), y='PLAYER', data=df_merged, color = 'r', s=50)
         plt.scatter(x=stat + ' ' + str(year_high), y='PLAYER', data=df_merged, color = 'b', s=50)
         plt.hlines(y=range(len(df_merged)), xmin = df_merged[stat + ' ' + str(year_low)], xmax = df_merged[stat + ' ' + str(year_high)])
+        plt.ylim(0-(len(df_merged)*.005),(len(df_merged)+len(df_merged)*.005))
         plt.yticks(fontsize=15)
         st.write(fig)
 
-        st.text(df_merged.head(20))
+        st.write(plt.gca().get_ylim())
+        st.write(len(df_merged))
 
 
         st.write('Data Source: https://www.nba.com/stats')
