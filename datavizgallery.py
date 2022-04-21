@@ -1,5 +1,6 @@
 import os
 import random
+from textwrap import indent
 from turtle import fillcolor
 import pandas as pd
 import numpy as np
@@ -31,26 +32,27 @@ elif option == 'NBA':
     if option_nba == 'Player Stats Over Time':
         years = list(df.BEGIN_YEAR.unique())
         year_low, year_high = season_slider(years)
-        st.text(year_low)
-        st.text(year_high)
-        st.title('Hang tight... Page Coming Soon.')
-        st.title('Player Stats by Season')
+        st.title('Player Stat - Year-to-Year')
         df_1 = df[df['BEGIN_YEAR'] == year_low]
         df_2 = df[df['BEGIN_YEAR'] == year_high]
-        st.text(df_1.head())
-        st.text(df_2.head())
         stat = 'MIN_PG'
         df_merged = df_1[['PLAYER', stat]].merge(df_2[['PLAYER', stat]], how='inner', on='PLAYER')
         df_merged.rename(columns={stat + '_x': stat + ' ' + str(year_low), stat + '_y': stat + ' ' + str(year_high)}, inplace=True)
-        st.text(df_merged.head())
 
         df_merged.sort_values(stat + ' ' + str(year_high), inplace=True)
+        df_merged = df_merged.reset_index(drop=True)
+        # df_merged.reset_index(inplace=True)
 
-        fig = plt.figure(figsize=(10,len(df_merged)/4))
+
+        fig = plt.figure(figsize=(10,len(df_merged)/(len(df_merged)/50)))
+        plt.title('Player Stats - Year-to-Year Comparison')
         plt.scatter(x=stat + ' ' + str(year_low), y='PLAYER', data=df_merged, color = 'r', s=50)
         plt.scatter(x=stat + ' ' + str(year_high), y='PLAYER', data=df_merged, color = 'b', s=50)
         plt.hlines(y=range(len(df_merged)), xmin = df_merged[stat + ' ' + str(year_low)], xmax = df_merged[stat + ' ' + str(year_high)])
+        plt.yticks(fontsize=15)
         st.write(fig)
+
+        st.text(df_merged.head(20))
 
 
         st.write('Data Source: https://www.nba.com/stats')
