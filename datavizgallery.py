@@ -42,6 +42,10 @@ elif option == 'NBA':
         df_merged.sort_values(stat + ' ' + str(year_high), inplace=True)
         df_merged = df_merged.reset_index(drop=True)
         df_merged.dropna(inplace=True)
+
+        # TODO
+        # Some problem when 2012 is selected as max year - Min Scatter appears to be off by 1
+        # Tried dropping N/As as below, didn't work. Look into source data maybe.
         # df_merged.reset_index(inplace=True)
 
         if len(df_merged) < 50:
