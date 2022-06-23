@@ -35,7 +35,7 @@ elif option == 'NBA':
         st.title('Player Stat - Year-to-Year')
         df_1 = df[df['BEGIN_YEAR'] == year_low]
         df_2 = df[df['BEGIN_YEAR'] == year_high]
-        stat = 'MIN_PG'
+        stat = 'PTS_PG'
         df_merged = df_1[['PLAYER', stat]].merge(df_2[['PLAYER', stat]], how='inner', on='PLAYER')
         df_merged.rename(columns={stat + '_x': stat + ' ' + str(year_low), stat + '_y': stat + ' ' + str(year_high)}, inplace=True)
 
@@ -66,7 +66,7 @@ elif option == 'NBA':
             fig_scaler = 90
 
         fig = plt.figure(figsize=(10,len(df_merged)/(len(df_merged)/fig_scaler)))
-        plt.title('Player Stats - Year-to-Year Comparison')
+        plt.title('Points Per Game - Player Stats - Year-to-Year Comparison')
         plt.scatter(x=stat + ' ' + str(year_low), y='PLAYER', data=df_merged, color = 'r', s=50)
         plt.scatter(x=stat + ' ' + str(year_high), y='PLAYER', data=df_merged, color = 'b', s=50)
         plt.hlines(y=range(len(df_merged)), xmin = df_merged[stat + ' ' + str(year_low)], xmax = df_merged[stat + ' ' + str(year_high)])
