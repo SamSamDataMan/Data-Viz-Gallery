@@ -5,13 +5,14 @@ from turtle import fillcolor
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import matplotlib.patches as mpatches
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, Tooltip
 import seaborn as sns
 import streamlit as st
 from home import render_home
 from dataframes import nba_player_stats
-from sidebar import render_option, render_option_nba, render_year_selection, optional_variable_checkbox, render_nba_player_stats_options, season_slider
+from sidebar import render_option, render_option_nba, render_year_selection, optional_variable_checkbox, render_nba_player_stats_options, season_slider, render_nba_season_compare_stats_options
 
 def normalize(values, bounds):
     return [bounds['desired']['lower'] + (x - bounds['actual']['lower']) * (bounds['desired']['upper'] - bounds['desired']['lower']) / (bounds['actual']['upper'] - bounds['actual']['lower']) for x in values]
@@ -32,10 +33,11 @@ elif option == 'NBA':
     if option_nba == 'Player Stats Over Time':
         years = list(df.BEGIN_YEAR.unique())
         year_low, year_high = season_slider(years)
-        st.title('Player Stat - Year-to-Year')
+        stat = render_nba_season_compare_stats_options(cols)
+        st.title('Player ' + stat.title() + ': Year-to-Year Comparison')
         df_1 = df[df['BEGIN_YEAR'] == year_low]
         df_2 = df[df['BEGIN_YEAR'] == year_high]
-        stat = 'PTS_PG'
+        # stat = 'PTS_PG'
         df_merged = df_1[['PLAYER', stat]].merge(df_2[['PLAYER', stat]], how='inner', on='PLAYER')
         df_merged.rename(columns={stat + '_x': stat + ' ' + str(year_low), stat + '_y': stat + ' ' + str(year_high)}, inplace=True)
 
@@ -66,12 +68,15 @@ elif option == 'NBA':
             fig_scaler = 90
 
         fig = plt.figure(figsize=(10,len(df_merged)/(len(df_merged)/fig_scaler)))
-        plt.title('Points Per Game - Player Stats - Year-to-Year Comparison')
+        #plt.title(stat + ' - Year-to-Year Comparison')
         plt.scatter(x=stat + ' ' + str(year_low), y='PLAYER', data=df_merged, color = 'r', s=50)
         plt.scatter(x=stat + ' ' + str(year_high), y='PLAYER', data=df_merged, color = 'b', s=50)
         plt.hlines(y=range(len(df_merged)), xmin = df_merged[stat + ' ' + str(year_low)], xmax = df_merged[stat + ' ' + str(year_high)])
         plt.ylim(0-(len(df_merged)*.005),(len(df_merged)+len(df_merged)*.005))
         plt.yticks(fontsize=15)
+        red_patch = mpatches.Patch(color='red', label=year_low)
+        blue_patch = mpatches.Patch(color='blue', label=year_high)
+        plt.legend(handles=[red_patch, blue_patch])
         st.write(fig)
 
         st.write(plt.gca().get_ylim())
